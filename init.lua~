@@ -1,0 +1,388 @@
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  -- Add your plugins here
+  { "nvim-lua/plenary.nvim" },
+  { "lewis6991/gitsigns.nvim" },
+  { "windwp/nvim-autopairs" },
+  { "nvimtools/none-ls.nvim" },
+
+-- {
+-- you ran out of credits.
+--     "github/copilot.vim",
+--     config = function()
+--       -- Configuration for Copilot goes here
+--       vim.g.copilot_no_tab_map = true
+--       vim.api.nvim_set_keymap("i", "<C-J>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+--     end,
+--   },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+	ensure_installed = {"python", "latex",  "markdown", "ledger"},
+	highlight = {
+	  enable = true,
+	},
+      })
+    end,
+  },
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      require("lspconfig").pyright.setup({})
+      require("lspconfig").ts_ls.setup({})
+    end,
+  },
+
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+  { "neovim/nvim-lspconfig" },
+  { "hrsh7th/nvim-cmp", dependencies = { "hrsh7th/cmp-nvim-lsp", "hrsh7th/cmp-buffer", "hrsh7th/cmp-path" } },
+  { "nvim-lua/plenary.nvim" },
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+  { "windwp/nvim-autopairs" }, 
+  {
+  "kyza0d/vocal.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  opts = {}
+},
+{
+  "jackMort/ChatGPT.nvim",
+  event = "VeryLazy",
+  dependencies = {
+    "MunifTanjim/nui.nvim",
+    "nvim-lua/plenary.nvim",
+    "folke/trouble.nvim",
+    "nvim-telescope/telescope.nvim"
+  },
+  config = function()
+    require("chatgpt").setup({
+      api_key_cmd = "pass show openai/apikey"
+    })
+  end,
+} ,
+{
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  },
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("which-key").show({ global = false })
+      end,
+      desc = "Buffer Local Keymaps (which-key)",
+    },
+  },
+},
+{
+  "nvimtools/none-ls.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  config = function()
+    local null_ls = require("null-ls")
+    
+    null_ls.setup({
+      sources = {
+        -- Formatters
+        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.black,
+        
+        -- Linters
+        null_ls.builtins.diagnostics.flake8.with({
+          condition = function(utils)
+            return utils.root_has_file({"setup.py", "pyproject.toml"}) or
+                utils.is_executable("flake8")
+              end, }),
+            
+          },
+        })
+      end,
+    }
+    })
+
+vim.cmd([[colorscheme zellner]])
+
+-- Additional Neovim settings
+-- For example:
+-- vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+-- vim.opt.smartindent = true
+-- vim.opt.wrap = false
+-- vim.opt.termguicolors = true
+-- vim.opt.cursorline = true
+-- vim.opt.scrolloff = 8
+vim.opt.signcolumn = "yes"
+-- vim.opt.updatetime = 300
+-- vim.opt.clipboard = "unnamedplus"
+-- vim.opt.mouse = "a"
+-- vim.opt.splitbelow = true
+-- vim.opt.splitright = true
+-- vim.opt.hidden = true
+vim.opt.backup = true
+-- vim.opt.writebackup = false
+vim.opt.swapfile = false
+-- vim.opt.undofile = true
+-- vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
+-- vim.opt.completeopt = { "menu", "menuone", "noselect" }
+-- vim.opt.shortmess:append("c") -- Don't show completion messages
+vim.opt.iskeyword:append("-") -- Treat hyphenated words as a single word
+vim.opt.showmode = false -- Don't show mode in the command line
+
+-- Set wrap by default
+vim.opt.wrap = true
+
+-- Disable wrap for code files
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "python", "lua", "javascript", "go", "c", "cpp", "rust" },
+  callback = function()
+    vim.opt_local.wrap = false
+  end,
+})
+
+require("vocal").setup({
+  -- API key (string, table with command, or nil to use OPENAI_API_KEY env var)
+  api_key = nil,
+
+  -- Directory to save recordings
+  recording_dir = os.getenv("HOME") .. "/recordings",
+
+  -- Delete recordings after transcription
+  delete_recordings = true,
+
+  -- Keybinding to trigger :Vocal (set to nil to disable)
+  keymap = "<leader>v",
+
+  -- Local model configuration (set this to use local model instead of API)
+  local_model = nil,
+  -- { model = "base",       -- Model size: tiny, base, small, medium, large path = "~/whisper",   -- Path to download and store models },
+
+  -- API configuration (used only when local_model is not set)
+  api = {
+    model = "whisper-1",
+    language = "en",       -- Auto-detect language ends up giving me Welsh!
+    response_format = "json",
+    temperature = 0,
+    timeout = 60,
+  },
+})
+
+-- local chatgpt = require("chatgpt")
+-- wk.register({
+--     p = {
+--         name = "ChatGPT",
+--         e = {
+--             function()
+--                 chatgpt.edit_with_instructions()
+--             end,
+--             "Edit with instructions",
+--         },
+--     },
+-- }, {
+--     prefix = "<leader>",
+--     mode = "v",
+-- })
+--
+--
+
+-- ChatGPT.nvim keybindings with which-key
+-- Add this to your init.lua or in a separate keymaps file
+
+-- Make sure which-key is loaded
+local wk = require("which-key")
+
+-- ChatGPT keybindings using which-key
+wk.add({
+  -- Main ChatGPT group
+  { "<leader>c", group = "ChatGPT" },
+  
+  -- Core commands
+  { "<leader>cc", "<cmd>ChatGPT<CR>", desc = "Open Chat", mode = "n" },
+  { "<leader>ce", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with Instructions", mode = { "n", "v" } },
+  { "<leader>cq", "<cmd>ChatGPTActAs<CR>", desc = "Act As Role", mode = "n" },
+  
+  -- Code improvement group
+  { "<leader>ci", group = "Code Improvement" },
+  { "<leader>cio", "<cmd>ChatGPTRun optimize_code<CR>", desc = "Optimize Code", mode = { "n", "v" } },
+  { "<leader>cif", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Fix Bugs", mode = { "n", "v" } },
+  { "<leader>ciR", "<cmd>ChatGPTRun refactor_code<CR>", desc = "Refactor Code", mode = { "n", "v" } },
+  { "<leader>cir", "<cmd>ChatGPTRun code_readability_analysis<CR>", desc = "Readability Analysis", mode = { "n", "v" } },
+  
+  -- Documentation group
+  { "<leader>cd", group = "Documentation" },
+  { "<leader>cdx", "<cmd>ChatGPTRun explain_code<CR>", desc = "Explain Code", mode = { "n", "v" } },
+  { "<leader>cdt", "<cmd>ChatGPTRun add_tests<CR>", desc = "Add Tests", mode = { "n", "v" } },
+  { "<leader>cdd", "<cmd>ChatGPTRun add_docstring<CR>", desc = "Add Docstring", mode = { "n", "v" } },
+  { "<leader>cds", "<cmd>ChatGPTRun summarize<CR>", desc = "Summarize", mode = { "n", "v" } },
+  
+  -- Text processing group
+  { "<leader>ct", group = "Text Processing" },
+  { "<leader>ctg", "<cmd>ChatGPTRun grammar_correction<CR>", desc = "Grammar Correction", mode = { "n", "v" } },
+  { "<leader>ctk", "<cmd>ChatGPTRun keywords<CR>", desc = "Extract Keywords", mode = { "n", "v" } },
+  { "<leader>ctt", "<cmd>ChatGPTRun translate<CR>", desc = "Translate", mode = { "n", "v" } },
+  
+  -- Custom prompts
+  { "<leader>cp", group = "Custom Prompts" },
+  { 
+    "<leader>cpc", 
+    function()
+      vim.ui.input({ prompt = "Custom ChatGPT Prompt: " }, function(input)
+        if input and input ~= "" then
+          vim.cmd("ChatGPTRun " .. input)
+        end
+      end)
+    end, 
+    desc = "Custom Prompt", 
+    mode = { "n", "v" } 
+  },
+  
+  -- Quick actions with single letters
+  { "<leader>co", "<cmd>ChatGPTRun optimize_code<CR>", desc = "Quick Optimize", mode = { "n", "v" } },
+  { "<leader>cf", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Quick Fix", mode = { "n", "v" } },
+  { "<leader>cx", "<cmd>ChatGPTRun explain_code<CR>", desc = "Quick Explain", mode = { "n", "v" } },
+  
+  -- Function keys for quick access
+  { "<F12>", "<cmd>ChatGPT<CR>", desc = "ChatGPT", mode = "n" },
+  { "<F11>", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with Instructions", mode = "v" },
+})
+
+-- Alternative AI prefix if you prefer
+wk.add({
+  { "<leader>a", group = "AI Assistant" },
+  { "<leader>ac", "<cmd>ChatGPT<CR>", desc = "AI Chat", mode = "n" },
+  { "<leader>ae", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "AI Edit", mode = { "n", "v" } },
+  { "<leader>ao", "<cmd>ChatGPTRun optimize_code<CR>", desc = "AI Optimize", mode = { "n", "v" } },
+  { "<leader>af", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "AI Fix", mode = { "n", "v" } },
+  { "<leader>ax", "<cmd>ChatGPTRun explain_code<CR>", desc = "AI Explain", mode = { "n", "v" } },
+})
+
+-- Language-specific shortcuts (optional)
+wk.add({
+  { "<leader>cl", group = "Language Specific" },
+  { "<leader>clp", "<cmd>ChatGPTRun python_docstring<CR>", desc = "Python Docstring", mode = { "n", "v" } },
+  { "<leader>clj", "<cmd>ChatGPTRun javascript_optimization<CR>", desc = "JS Optimization", mode = { "n", "v" } },
+  { "<leader>cll", "<cmd>ChatGPTRun lua_improvement<CR>", desc = "Lua Improvement", mode = { "n", "v" } },
+})
+
+-- Contextual shortcuts that appear only in specific modes
+wk.add({
+  { "<leader>cv", group = "Visual Mode", mode = "v" },
+  { 
+    "<leader>cvr", 
+    function()
+      local start_pos = vim.fn.getpos("'<")
+      local end_pos = vim.fn.getpos("'>")
+      local lines = vim.fn.getline(start_pos[2], end_pos[2])
+      local text = table.concat(lines, "\n")
+      vim.ui.input({ prompt = "Review selected code for: " }, function(input)
+        if input and input ~= "" then
+          vim.cmd("ChatGPTEditWithInstruction")
+        end
+      end)
+    end,
+    desc = "Review Selected Code",
+    mode = "v"
+  },
+})
+
+-- Optional: Add some preset prompts for common tasks
+local preset_prompts = {
+  security = "Review this code for security vulnerabilities and suggest improvements",
+  performance = "Analyze this code for performance bottlenecks and suggest optimizations",
+  cleanup = "Clean up this code, remove redundancy, and improve readability",
+  error_handling = "Add proper error handling to this code",
+  logging = "Add appropriate logging statements to this code",
+  comments = "Add clear, helpful comments to explain this code",
+}
+
+-- Add preset prompts to which-key
+local preset_keys = {}
+for key, prompt in pairs(preset_prompts) do
+  table.insert(preset_keys, {
+    "<leader>cp" .. key:sub(1, 1),
+    function()
+      vim.cmd("ChatGPTEditWithInstruction " .. prompt)
+    end,
+    desc = key:gsub("_", " "):gsub("^%l", string.upper),
+    mode = { "n", "v" }
+  })
+end
+
+wk.add(preset_keys)
+
+-- Optional: Create a telescope picker for ChatGPT actions (if you use telescope)
+local function create_chatgpt_picker()
+  if pcall(require, "telescope") then
+    local pickers = require("telescope.pickers")
+    local finders = require("telescope.finders")
+    local conf = require("telescope.config").values
+    local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+    
+    local chatgpt_actions = {
+      { "optimize_code", "Optimize Code" },
+      { "fix_bugs", "Fix Bugs" },
+      { "explain_code", "Explain Code" },
+      { "add_tests", "Add Tests" },
+      { "add_docstring", "Add Docstring" },
+      { "refactor_code", "Refactor Code" },
+      { "code_readability_analysis", "Code Readability Analysis" },
+      { "summarize", "Summarize" },
+      { "grammar_correction", "Grammar Correction" },
+      { "keywords", "Extract Keywords" },
+    }
+    
+    pickers.new({}, {
+      prompt_title = "ChatGPT Actions",
+      finder = finders.new_table({
+        results = chatgpt_actions,
+        entry_maker = function(entry)
+          return {
+            value = entry[1],
+            display = entry[2],
+            ordinal = entry[2],
+          }
+        end,
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr, map)
+        actions.select_default:replace(function()
+          actions.close(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          vim.cmd("ChatGPTRun " .. selection.value)
+        end)
+        return true
+      end,
+    }):find()
+  end
+end
+
+-- Add telescope picker to which-key
+wk.add({
+  { "<leader>cs", create_chatgpt_picker, desc = "Select ChatGPT Action", mode = { "n", "v" } },
+})

@@ -1,0 +1,51 @@
+return {
+  "nvimtools/none-ls.nvim",
+  event = { "BufReadPre", "BufNewFile" },
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  config = function()
+    local null_ls = require("null-ls")
+    
+    null_ls.setup({
+      sources = {
+        -- Formatters
+        null_ls.builtins.formatting.prettier.with({
+          extra_filetypes = { "toml" },
+        }),
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.black.with({
+          extra_args = { "--fast" },
+        }),
+        null_ls.builtins.formatting.isort,
+        
+        -- Linters
+        null_ls.builtins.diagnostics.flake8.with({
+          extra_args = { "--max-line-length=88", "--extend-ignore=E203" },
+        }),
+        null_ls.builtins.diagnostics.eslint_d,
+        null_ls.builtins.diagnostics.pylint.with({
+          diagnostics_postprocess = function(diagnostic)
+            diagnostic.code = diagnostic.message_id
+          end,
+        }),
+      },
+      debug = false,
+      on_attach = function(client, bufnr)
+        if client.supports_method("textDocument/formatting") then
+          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+          vim.api.nvim_create_autocmd("BufWritePre", {
+            group = augroup,
+            buffer = bufnr,
+            callback = function()
+              vim.lsp.buf.format({ bufnr = bufnr })
+            end,
+          })
+        end
+      end,
+    })
+    
+    -- Create autogroup for formatting
+    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+  end,
+}
