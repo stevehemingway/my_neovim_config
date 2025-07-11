@@ -10,10 +10,10 @@ return {
     null_ls.setup({
       sources = {
         -- Formatters
-        null_ls.builtins.formatting.prettier.with({
-          extra_filetypes = { "toml" },
-        }),
-        null_ls.builtins.formatting.stylua,
+        -- null_ls.builtins.formatting.prettier.with({
+        --   extra_filetypes = { "toml" },
+        --}),
+        -- null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.black.with({
           extra_args = { "--fast" },
         }),
@@ -30,7 +30,7 @@ return {
       },
       debug = false,
       on_attach = function(client, bufnr)
-        if client.supports_method("textDocument/formatting") then
+        if client:supports_method("textDocument/formatting") then
           vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
           vim.api.nvim_create_autocmd("BufWritePre", {
             group = augroup,
