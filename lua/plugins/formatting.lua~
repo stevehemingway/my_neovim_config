@@ -21,7 +21,7 @@ return {
         
         -- Linters
         -- null_ls.builtins.diagnostics.flake8.with({ extra_args = { "--max-line-length=88", "--extend-ignore=E203" }, }),
-        -- null_ls.builtins.diagnostics.eslint_d,
+        null_ls.builtins.diagnostics.eslint_d,
         null_ls.builtins.diagnostics.pylint.with({
           diagnostics_postprocess = function(diagnostic)
             diagnostic.code = diagnostic.message_id
