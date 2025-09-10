@@ -21,7 +21,6 @@ require("lazy").setup("plugins", {
     lazy = false,
     version = false,
   },
-  install = { colorscheme = { "zellner" } },
   checker = { enabled = true },
   performance = {
     rtp = {
@@ -40,7 +39,8 @@ require("lazy").setup("plugins", {
 })
 
 -- Set colorscheme
-vim.cmd([[colorscheme zellner]])
 
 -- Load keymaps after plugins
 require("keymaps")
+
+
