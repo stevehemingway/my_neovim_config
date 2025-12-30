@@ -92,14 +92,20 @@ wk.add({
   { "<F11>", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with Instructions", mode = "v" },
 })
 
--- Alternative AI prefix
+-- AI Assistant prefix (includes both ChatGPT and Avante)
 wk.add({
   { "<leader>a", group = "AI Assistant" },
-  { "<leader>ac", "<cmd>ChatGPT<CR>", desc = "AI Chat", mode = "n" },
-  { "<leader>ae", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "AI Edit", mode = { "n", "v" } },
-  { "<leader>ao", "<cmd>ChatGPTRun optimize_code<CR>", desc = "AI Optimize", mode = { "n", "v" } },
-  { "<leader>af", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "AI Fix", mode = { "n", "v" } },
-  { "<leader>ax", "<cmd>ChatGPTRun explain_code<CR>", desc = "AI Explain", mode = { "n", "v" } },
+  -- Avante keybindings (defined in plugins/avante.lua)
+  -- <leader>aa - Avante Ask
+  -- <leader>ar - Avante Refresh
+  -- <leader>av - Avante Edit (visual mode)
+  -- <leader>at - Avante Toggle
+  -- ChatGPT shortcuts
+  { "<leader>ac", "<cmd>ChatGPT<CR>", desc = "ChatGPT", mode = "n" },
+  { "<leader>ae", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "ChatGPT Edit", mode = { "n", "v" } },
+  { "<leader>ao", "<cmd>ChatGPTRun optimize_code<CR>", desc = "Optimize Code", mode = { "n", "v" } },
+  { "<leader>af", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Fix Bugs", mode = { "n", "v" } },
+  { "<leader>ax", "<cmd>ChatGPTRun explain_code<CR>", desc = "Explain Code", mode = { "n", "v" } },
 })
 
 -- Custom ChatGPT prompts

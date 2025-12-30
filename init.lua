@@ -33,13 +33,14 @@ require("lazy").setup("plugins", {
  "tohtml",
  "tutor",
  "zipPlugin",
+ "LuaSnip",
  },
  },
  },
 })
 
 -- Set colorscheme
-vim.cmd("colorscheme gruvbox")
+vim.cmd("colorscheme koehler")
 
 -- Load keymaps after plugins
 require("keymaps")
