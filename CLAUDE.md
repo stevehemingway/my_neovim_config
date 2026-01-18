@@ -26,8 +26,9 @@ All plugins are defined as separate Lua files in `lua/plugins/` that return lazy
   - To add a new language server, add an entry to the `servers` table (lsp.lua:12-39)
 
 - **completion.lua**: nvim-cmp autocompletion with LuaSnip
-  - Sources: LSP, snippets, buffer, path, cmdline
+  - Sources: Copilot, LSP, snippets, buffer, path, cmdline
   - Custom kind icons with Nerd Font symbols
+  - Integrated with copilot-cmp for AI completions
 
 - **telescope.lua**: Fuzzy finder with fzf-native extension
   - Ignores: node_modules, .git, binary files
@@ -51,6 +52,13 @@ All plugins are defined as separate Lua files in `lua/plugins/` that return lazy
   - API key retrieved via: `pass show openai/apikey`
   - Requires the `pass` password manager with this key stored
 
+- **copilot.lua**: GitHub Copilot AI pair programming assistant
+  - Dual integration: inline suggestions + nvim-cmp completion source
+  - Features: Auto-triggered suggestions, completion panel, accept by word/line
+  - Inline keybinds: Alt+l (accept), Alt+w (word), Alt+j (line), Alt+] (next)
+  - Requires GitHub Copilot subscription and authentication
+  - Authentication: Run `:Copilot auth` or `<leader>pa` on first use
+
 - **ui.lua**: UI enhancements (which-key, indent-blankline, vocal.nvim, gruvbox colorscheme)
 
 - **trouble.lua**: Diagnostics list UI
@@ -66,7 +74,8 @@ All keymaps use which-key for discoverability. Keybindings are organized under l
 - `<leader>g*` - Git operations (via Telescope and Gitsigns)
 - `<leader>t*` - Trouble diagnostics
 - `<leader>c*` - ChatGPT commands (extensive submenu structure)
-- `<leader>a*` - AI Assistant shortcuts (both Avante and ChatGPT)
+- `<leader>p*` - Copilot commands (enable, disable, status, auth, panel)
+- `<leader>a*` - AI Assistant shortcuts (Avante, ChatGPT, and Copilot)
   - `<leader>aa` - Avante Ask (open AI chat for selection/file)
   - `<leader>ar` - Avante Refresh (refresh AI response)
   - `<leader>av` - Avante Edit (edit with AI in visual mode)
@@ -76,6 +85,14 @@ All keymaps use which-key for discoverability. Keybindings are organized under l
   - `<leader>ao` - Optimize Code
   - `<leader>af` - Fix Bugs
   - `<leader>ax` - Explain Code
+- `<leader>p*` - GitHub Copilot commands
+  - `<leader>pe` - Enable Copilot
+  - `<leader>pd` - Disable Copilot
+  - `<leader>ps` - Copilot Status
+  - `<leader>pa` - Authenticate Copilot
+  - `<leader>pv` - Copilot Version
+  - `<leader>pp` - Open Copilot Panel
+  - Insert mode: `Alt+l` (accept), `Alt+w` (word), `Alt+j` (line), `Alt+]` (next), `Alt+[` (prev), `Ctrl+]` (dismiss)
 - `[d` / `]d` - Previous/next diagnostic
 - `[h` / `]h` - Previous/next git hunk
 
@@ -140,6 +157,7 @@ The configuration requires several external tools to function fully:
   export ANTHROPIC_API_KEY="sk-ant-..."
   ```
 - **OpenAI ChatGPT**: Stored in pass password manager at `openai/apikey`
+- **GitHub Copilot**: Requires GitHub Copilot subscription (authenticate via `:Copilot auth` or `<leader>pa`)
 
 ### Installing LSP Servers
 
@@ -164,3 +182,5 @@ npm install -g typescript-language-server typescript
 4. **Autocmd Behavior**: Wrap is enabled globally but disabled for code files. Other autocmds handle yank highlighting, directory creation, and cursor position restoration.
 
 5. **Formatting Bug**: In formatting.lua, the `augroup` variable is referenced before definition (line 34), then defined after setup (line 47). This should be moved before the null_ls.setup() call to avoid potential nil reference errors.
+
+6. **Dual Copilot Integration**: GitHub Copilot is configured with both inline suggestions (ghost text) and nvim-cmp integration, providing two complementary ways to accept AI suggestions - inline keybinds for quick acceptance and the completion menu for browsing multiple options.
