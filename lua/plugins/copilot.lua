@@ -7,8 +7,45 @@ return {
     event = "InsertEnter",
     config = function()
       require("copilot").setup({
-        suggestion = { enabled = false },   -- we’ll use nvim‑cmp for suggestions
-        panel = { enabled = false },        -- optional UI panel
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          debounce = 75,
+          keymap = {
+            accept = "<M-l>",      -- Alt+l to accept suggestion
+            accept_word = "<M-w>", -- Alt+w to accept word
+            accept_line = "<M-j>", -- Alt+j to accept line
+            next = "<M-]>",        -- Alt+] for next suggestion
+            prev = "<M-[>",        -- Alt+[ for previous suggestion
+            dismiss = "<C-]>",     -- Ctrl+] to dismiss
+          },
+        },
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = "[[",
+            jump_next = "]]",
+            accept = "<CR>",
+            refresh = "gr",
+            open = "<M-CR>",  -- Alt+Enter to open panel
+          },
+          layout = {
+            position = "bottom",
+            ratio = 0.4,
+          },
+        },
+        filetypes = {
+          yaml = true,
+          markdown = true,
+          help = false,
+          gitcommit = true,
+          gitrebase = false,
+          hgcommit = false,
+          svn = false,
+          cvs = false,
+          ["."] = false,
+        },
       })
     end,
   },

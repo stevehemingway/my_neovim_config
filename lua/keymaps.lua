@@ -92,7 +92,7 @@ wk.add({
   { "<F11>", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with Instructions", mode = "v" },
 })
 
--- AI Assistant prefix (includes both ChatGPT and Avante)
+-- AI Assistant prefix (includes ChatGPT, Avante, and Copilot)
 wk.add({
   { "<leader>a", group = "AI Assistant" },
   -- Avante keybindings (defined in plugins/avante.lua)
@@ -107,6 +107,40 @@ wk.add({
   { "<leader>af", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Fix Bugs", mode = { "n", "v" } },
   { "<leader>ax", "<cmd>ChatGPTRun explain_code<CR>", desc = "Explain Code", mode = { "n", "v" } },
 })
+
+-- Copilot keybindings
+wk.add({
+  { "<leader>p", group = "Copilot" },
+  { "<leader>pe", "<cmd>Copilot enable<CR>", desc = "Enable Copilot", mode = "n" },
+  { "<leader>pd", "<cmd>Copilot disable<CR>", desc = "Disable Copilot", mode = "n" },
+  { "<leader>ps", "<cmd>Copilot status<CR>", desc = "Copilot Status", mode = "n" },
+  { "<leader>pa", "<cmd>Copilot auth<CR>", desc = "Authenticate Copilot", mode = "n" },
+  { "<leader>pv", "<cmd>Copilot version<CR>", desc = "Copilot Version", mode = "n" },
+  { "<leader>pp", "<cmd>Copilot panel<CR>", desc = "Open Panel", mode = "n" },
+  {
+    "<leader>pt",
+    function()
+      local copilot = require("copilot.suggestion")
+      if copilot.is_visible() then
+        copilot.dismiss()
+      else
+        copilot.next()
+      end
+    end,
+    desc = "Toggle Suggestion",
+    mode = "i"
+  },
+})
+
+-- Copilot inline suggestion keybindings (Insert mode)
+-- Note: These are configured in the plugin setup (copilot.lua) but documented here:
+-- <M-l>   - Accept suggestion (Alt+l)
+-- <M-w>   - Accept word (Alt+w)
+-- <M-j>   - Accept line (Alt+j)
+-- <M-]>   - Next suggestion (Alt+])
+-- <M-[>   - Previous suggestion (Alt+[)
+-- <C-]>   - Dismiss suggestion (Ctrl+])
+-- <M-CR>  - Open Copilot panel (Alt+Enter)
 
 -- Custom ChatGPT prompts
 local preset_prompts = {
