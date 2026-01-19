@@ -142,6 +142,27 @@ wk.add({
 -- <C-]>   - Dismiss suggestion (Ctrl+])
 -- <M-CR>  - Open Copilot panel (Alt+Enter)
 
+-- Word count keybinding
+wk.add({
+  { "<leader>w", group = "Word Operations" },
+  {
+    "<leader>wc",
+    function()
+      local word_count = vim.fn.wordcount()
+      local count = word_count.words
+      local visual_count = word_count.visual_words
+
+      if visual_count then
+        vim.notify(string.format("Selected: %d words", visual_count), vim.log.levels.INFO)
+      else
+        vim.notify(string.format("Buffer: %d words", count), vim.log.levels.INFO)
+      end
+    end,
+    desc = "Count Words",
+    mode = { "n", "v" }
+  },
+})
+
 -- Custom ChatGPT prompts
 local preset_prompts = {
   security = "Review this code for security vulnerabilities and suggest improvements",
