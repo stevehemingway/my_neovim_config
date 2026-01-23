@@ -92,7 +92,7 @@ wk.add({
   { "<F11>", "<cmd>ChatGPTEditWithInstruction<CR>", desc = "Edit with Instructions", mode = "v" },
 })
 
--- AI Assistant prefix (includes ChatGPT, Avante, and Copilot)
+-- AI Assistant prefix (includes ChatGPT, Avante, Copilot, and Gp.nvim)
 wk.add({
   { "<leader>a", group = "AI Assistant" },
   -- Avante keybindings (defined in plugins/avante.lua)
@@ -106,6 +106,10 @@ wk.add({
   { "<leader>ao", "<cmd>ChatGPTRun optimize_code<CR>", desc = "Optimize Code", mode = { "n", "v" } },
   { "<leader>af", "<cmd>ChatGPTRun fix_bugs<CR>", desc = "Fix Bugs", mode = { "n", "v" } },
   { "<leader>ax", "<cmd>ChatGPTRun explain_code<CR>", desc = "Explain Code", mode = { "n", "v" } },
+  -- Gp.nvim (Kimi K2) shortcuts
+  { "<leader>ak", "<cmd>GpChatNew<CR>", desc = "Kimi Chat", mode = { "n", "v" } },
+  { "<leader>ag", "<cmd>GpChatToggle<CR>", desc = "Toggle Kimi Chat", mode = { "n", "v" } },
+  { "<leader>aw", "<cmd>GpRewrite<CR>", desc = "Kimi Rewrite", mode = { "n", "v" } },
 })
 
 -- Copilot keybindings
@@ -141,6 +145,25 @@ wk.add({
 -- <M-[>   - Previous suggestion (Alt+[)
 -- <C-]>   - Dismiss suggestion (Ctrl+])
 -- <M-CR>  - Open Copilot panel (Alt+Enter)
+
+-- Gp.nvim (Kimi K2) keybindings
+wk.add({
+  { "<leader>k", group = "Kimi AI (Gp.nvim)" },
+  { "<leader>kc", "<cmd>GpChatNew<CR>", desc = "New Chat", mode = { "n", "v" } },
+  { "<leader>kt", "<cmd>GpChatToggle<CR>", desc = "Toggle Chat", mode = { "n", "v" } },
+  { "<leader>kf", "<cmd>GpChatFinder<CR>", desc = "Find Chats", mode = "n" },
+  { "<leader>kr", "<cmd>GpRewrite<CR>", desc = "Rewrite Selection", mode = { "n", "v" } },
+  { "<leader>ka", "<cmd>GpAppend<CR>", desc = "Append Response", mode = { "n", "v" } },
+  { "<leader>kp", "<cmd>GpPrepend<CR>", desc = "Prepend Response", mode = { "n", "v" } },
+  { "<leader>ke", "<cmd>GpEnew<CR>", desc = "New Buffer", mode = { "n", "v" } },
+  { "<leader>kn", "<cmd>GpNew<CR>", desc = "New Window", mode = { "n", "v" } },
+  { "<leader>kv", "<cmd>GpVnew<CR>", desc = "New Vsplit", mode = { "n", "v" } },
+  { "<leader>kT", "<cmd>GpTabnew<CR>", desc = "New Tab", mode = { "n", "v" } },
+  { "<leader>ks", "<cmd>GpStop<CR>", desc = "Stop Response", mode = { "n", "v" } },
+  { "<leader>kx", "<cmd>GpContext<CR>", desc = "Show Context", mode = { "n", "v" } },
+  { "<leader>kN", "<cmd>GpNextAgent<CR>", desc = "Next Agent", mode = "n" },
+  { "<leader>ki", "<cmd>GpAgent<CR>", desc = "Show Agent Info", mode = "n" },
+})
 
 -- Word count keybinding
 wk.add({
