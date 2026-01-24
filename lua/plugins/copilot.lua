@@ -56,9 +56,9 @@ return {
     "zbirenbaum/copilot-cmp",
     enabled = false,
     event = "InsertEnter",
-    dependencies = { "zbirenbaum/copilot.lua" },
+   -- dependencies = { "zbirenbaum/copilot.lua" },
     config = function()
-      require("copilot_cmp").setup()
+  --    require("copilot_cmp").setup()
     end,
   },
 }
