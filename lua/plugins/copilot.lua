@@ -3,6 +3,7 @@ return {
   -- 1️⃣ Copilot core (lazy‑loaded on first InsertEnter)
   {
     "zbirenbaum/copilot.lua",
+    enabled = false,
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
@@ -53,6 +54,7 @@ return {
   -- 2️⃣ Copilot → nvim‑cmp source
   {
     "zbirenbaum/copilot-cmp",
+    enabled = false,
     event = "InsertEnter",
     dependencies = { "zbirenbaum/copilot.lua" },
     config = function()

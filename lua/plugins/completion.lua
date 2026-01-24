@@ -9,7 +9,7 @@ return {
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
     "rafamadriz/friendly-snippets",
-    "zbirenbaum/copilot-cmp",
+    -- "zbirenbaum/copilot-cmp", -- Disabled
   },
   config = function()
     local cmp = require("cmp")
