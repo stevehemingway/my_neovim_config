@@ -46,6 +46,17 @@ return {
       style_chat_finder_border = "single",
       style_popup_border = "single",
 
+      -- Whisper speech-to-text configuration (requires sox)
+      whisper = {
+        disable = false,
+        endpoint = "https://api.openai.com/v1/audio/transcriptions",
+        store_dir = (os.getenv("TMPDIR") or os.getenv("TEMP") or "/tmp") .. "/gp_whisper",
+        silence = "1.75", -- Multiplier for silence detection threshold
+        tempo = "1.75", -- Speed up audio to reduce costs (1.75x)
+        language = "en",
+        rec_cmd = nil, -- Auto-detect (will use sox, arecord, or ffmpeg)
+      },
+
       -- Keybindings are defined in keymaps.lua
     }
 

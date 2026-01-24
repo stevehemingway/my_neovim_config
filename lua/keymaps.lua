@@ -163,6 +163,16 @@ wk.add({
   { "<leader>kx", "<cmd>GpContext<CR>", desc = "Show Context", mode = { "n", "v" } },
   { "<leader>kN", "<cmd>GpNextAgent<CR>", desc = "Next Agent", mode = "n" },
   { "<leader>ki", "<cmd>GpAgent<CR>", desc = "Show Agent Info", mode = "n" },
+  -- Whisper voice commands (requires sox)
+  { "<leader>kw", group = "Whisper Voice" },
+  { "<leader>kww", "<cmd>GpWhisper<CR>", desc = "Record & Transcribe", mode = { "n", "v" } },
+  { "<leader>kwr", "<cmd>GpWhisperRewrite<CR>", desc = "Record & Rewrite", mode = { "n", "v" } },
+  { "<leader>kwa", "<cmd>GpWhisperAppend<CR>", desc = "Record & Append", mode = { "n", "v" } },
+  { "<leader>kwp", "<cmd>GpWhisperPrepend<CR>", desc = "Record & Prepend", mode = { "n", "v" } },
+  { "<leader>kwe", "<cmd>GpWhisperEnew<CR>", desc = "Record to New Buffer", mode = { "n", "v" } },
+  { "<leader>kwn", "<cmd>GpWhisperNew<CR>", desc = "Record to New Window", mode = { "n", "v" } },
+  { "<leader>kwv", "<cmd>GpWhisperVnew<CR>", desc = "Record to New Vsplit", mode = { "n", "v" } },
+  { "<leader>kwt", "<cmd>GpWhisperTabnew<CR>", desc = "Record to New Tab", mode = { "n", "v" } },
 })
 
 -- Word count keybinding
