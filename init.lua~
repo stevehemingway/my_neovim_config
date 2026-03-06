@@ -33,13 +33,18 @@ require("lazy").setup("plugins", {
  "tohtml",
  "tutor",
  "zipPlugin",
+ "LuaSnip",
  },
  },
  },
 })
 
 -- Set colorscheme
-vim.cmd("colorscheme koehler")
+-- vim.cmd("colorscheme koehler")
+-- vim.api.nvim_set_hl(0, 'Cursor', { reverse = true })              
+
+vim.cmd.colorscheme('PaperColor' )                                
+vim.opt.background = 'light'    -- invert cursor color
 
 -- Load keymaps after plugins
 require("keymaps")

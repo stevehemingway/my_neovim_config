@@ -40,7 +40,8 @@ require("lazy").setup("plugins", {
 })
 
 -- Set colorscheme
-vim.cmd("colorscheme koehler")
+vim.opt.background = "light"
+vim.cmd("colorscheme PaperColor")
 
 -- Load keymaps after plugins
 require("keymaps")

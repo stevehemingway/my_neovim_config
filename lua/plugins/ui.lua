@@ -94,4 +94,8 @@ return {
  })
  end,
  },
+ {
+ "NLKNguyen/papercolor-theme",
+ priority = 1000,
+ },
 }
